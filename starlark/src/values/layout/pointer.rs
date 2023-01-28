@@ -26,6 +26,7 @@
 
 use std::fmt::Debug;
 use std::marker::PhantomData;
+#[cfg(not(target_family = "wasm"))]
 use std::mem;
 use std::num::NonZeroUsize;
 
@@ -132,6 +133,7 @@ unsafe fn untag_pointer<'a>(x: usize) -> &'a AValueOrForward {
     cast::usize_to_ptr(x & !TAG_BITS)
 }
 
+#[cfg(not(target_family = "wasm"))]
 #[allow(clippy::unused_unit)]
 const _: () = if mem::size_of::<usize>() > mem::size_of::<i32>() {
     ()

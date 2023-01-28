@@ -15,6 +15,10 @@ build = "build.rs"
 keywords = ["starlark", "skylark", "bazel", "language", "interpreter"]
 categories = ["parser-implementations", "development-tools"]
 
+[lib]
+name = "starlark"
+crate-type = ["cdylib", "rlib"]
+
 [build-dependencies]
 lalrpop = "0.19.7"
 
@@ -40,11 +44,11 @@ gazebo_lint.version = "0.1"
 gazebo_lint.optional = true
 # @oss-disable: gazebo_lint.path = "../../gazebo_lint/gazebo_lint"
 gazebo = { workspace = true }
-walkdir = "2.3"
+walkdir = { version = "2.3", optional = true }
 serde = { version = "1.0", features = ["derive"] }
 logos = "0.12"
 serde_json = "1.0"
-rustyline = "9.1"
+rustyline = { version = "10.1.1", optional = true }
 maplit = "1.0.2"
 lsp-server = "0.5"
 lsp-types = "0.93.0"
@@ -55,11 +59,11 @@ textwrap = "0.15"
 fancy-regex = "0.10.0"
 regex = "1.5.4"
 strsim = "0.10.0"
-argfile = "0.1.0"
+argfile = { version = "0.1.0", optional = true }
 num-bigint = "0.4.3"
 num-traits = "0.2"
 inventory = "0.1.10"
-clap = { version = "4.0.7", features = ["derive", "wrap_help"] }
+clap = { version = "4.0.7", features = ["derive", "wrap_help"], optional = true }
 
 allocative = { workspace = true, features = ["bumpalo", "hashbrown", "num-bigint"] }
 
@@ -72,3 +76,4 @@ rand = { version = "0.8.4", features = ["small_rng"] }
 [[bin]]
 name = "starlark"
 path = "bin/main.rs"
+required-features = ["argfile", "clap", "eval", "walkdir"]

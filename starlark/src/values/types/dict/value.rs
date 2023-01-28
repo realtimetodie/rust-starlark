@@ -109,6 +109,7 @@ pub(crate) struct FrozenDictData {
 }
 
 /// Alias is used in `StarlarkDocs` derive.
+#[cfg(not(target_family = "wasm"))]
 type FrozenDict = DictGen<FrozenDictData>;
 
 unsafe impl<'v> Coerce<Dict<'v>> for FrozenDictData {}

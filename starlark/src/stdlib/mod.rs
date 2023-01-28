@@ -22,6 +22,7 @@ use dupe::Dupe;
 
 use crate::environment::GlobalsBuilder;
 
+#[cfg(not(target_family = "wasm"))]
 pub(crate) mod breakpoint;
 pub(crate) mod dict;
 pub(crate) mod enumeration;
@@ -72,6 +73,7 @@ pub enum LibraryExtension {
     Print,
     /// Add a function `pprint(x)` which pretty-prints to stderr.
     Pprint,
+    #[cfg(not(target_family = "wasm"))]
     /// Add a function `breakpoint()` which will drop into a console-module evaluation prompt.
     Breakpoint,
     /// Add a function `json()` which will generate JSON for a module.
@@ -96,6 +98,7 @@ impl LibraryExtension {
             Debug,
             Print,
             Pprint,
+            #[cfg(not(target_family = "wasm"))]
             Breakpoint,
             Json,
             Abs,
@@ -116,6 +119,7 @@ impl LibraryExtension {
             Debug => extra::debug(builder),
             Print => extra::print(builder),
             Pprint => extra::pprint(builder),
+            #[cfg(not(target_family = "wasm"))]
             Breakpoint => breakpoint::global(builder),
             Json => json::json(builder),
             Abs => extra::abs(builder),

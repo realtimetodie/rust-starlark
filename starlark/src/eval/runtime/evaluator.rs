@@ -58,7 +58,9 @@ use crate::eval::runtime::slots::LocalCapturedSlotId;
 use crate::eval::runtime::slots::LocalSlotId;
 use crate::eval::CallStack;
 use crate::eval::FileLoader;
+#[cfg(not(target_family = "wasm"))]
 use crate::stdlib::breakpoint::BreakpointConsole;
+#[cfg(not(target_family = "wasm"))]
 use crate::stdlib::breakpoint::RealBreakpointConsole;
 use crate::stdlib::extra::PrintHandler;
 use crate::stdlib::extra::StderrPrintHandler;
@@ -151,6 +153,7 @@ pub struct Evaluator<'v, 'a> {
     /// Field that can be used for any purpose you want (can store types you define).
     /// Typically accessed via native functions you also define.
     pub extra: Option<&'a dyn AnyLifetime<'a>>,
+    #[cfg(not(target_family = "wasm"))]
     /// Called to perform console IO each time `breakpoint` function is called.
     pub(crate) breakpoint_handler: Option<Box<dyn Fn() -> Box<dyn BreakpointConsole>>>,
     /// Use in implementation of `print` function.
@@ -195,6 +198,7 @@ impl<'v, 'a> Evaluator<'v, 'a> {
             before_stmt: BeforeStmt::default(),
             module_def_info: DefInfo::empty(), // Will be replaced before it is used
             string_pool: StringPool::default(),
+            #[cfg(not(target_family = "wasm"))]
             breakpoint_handler: None,
             print_handler: &StderrPrintHandler,
             verbose_gc: false,
@@ -363,6 +367,7 @@ impl<'v, 'a> Evaluator<'v, 'a> {
     /// Enable interactive `breakpoint()`. When enabled, `breakpoint()`
     /// reads commands from stdin and write to stdout.
     /// When disabled (default), `breakpoint()` function results in error.
+    #[cfg(not(target_family = "wasm"))]
     pub fn enable_terminal_breakpoint_console(&mut self) {
         self.breakpoint_handler = Some(RealBreakpointConsole::factory());
     }

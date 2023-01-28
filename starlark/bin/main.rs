@@ -33,7 +33,6 @@ use std::sync::Arc;
 use clap::Parser;
 use clap::ValueEnum;
 use dupe::Dupe;
-use eval::Context;
 use itertools::Either;
 use itertools::Itertools;
 use starlark::docs::get_registered_starlark_docs;
@@ -49,6 +48,7 @@ use starlark::lsp;
 use starlark::read_line::ReadLine;
 use walkdir::WalkDir;
 
+use crate::eval::Context;
 use crate::eval::ContextMode;
 use crate::types::LintMessage;
 

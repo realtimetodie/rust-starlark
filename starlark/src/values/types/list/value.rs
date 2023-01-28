@@ -97,6 +97,7 @@ impl Debug for FrozenListData {
 }
 
 /// Alias is used in `StarlarkDocs` derive.
+#[cfg(not(target_family = "wasm"))]
 type FrozenList = ListGen<FrozenListData>;
 
 impl ListGen<FrozenListData> {

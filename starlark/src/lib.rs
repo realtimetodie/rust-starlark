@@ -399,8 +399,10 @@ pub mod docs;
 pub mod environment;
 pub mod errors;
 pub mod eval;
+#[cfg(not(target_family = "wasm"))]
 pub mod lsp;
 mod private;
+#[cfg(not(target_family = "wasm"))]
 pub mod read_line;
 mod sealed;
 pub mod typing;
@@ -433,5 +435,6 @@ pub mod __derive_refs {
         pub use serde::Serialize;
         pub use serde::Serializer;
     }
+    #[cfg(not(target_family = "wasm"))]
     pub use inventory;
 }

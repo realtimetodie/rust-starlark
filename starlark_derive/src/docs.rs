@@ -50,6 +50,10 @@ fn expand_docs_derive(input: DeriveInput) -> syn::Result<proc_macro2::TokenStrea
 
     let parsed_attrs = parse_custom_attributes(attrs)?;
 
+    #[cfg(target_family = "wasm")]
+    let use_inventory = quote! {};
+
+    #[cfg(not(target_family = "wasm"))]
     let use_inventory = if parsed_attrs.contains_key("builtin") {
         quote! {}
     } else {
@@ -100,6 +104,7 @@ fn expand_docs_derive(input: DeriveInput) -> syn::Result<proc_macro2::TokenStrea
 
     Ok(quote_spanned! {span=>
         fn #namespace_fn_name() {
+            #[cfg(not(target_family = "wasm"))]
             #use_inventory
             starlark::__derive_refs::inventory::submit! {
                 starlark::docs::RegisteredDoc {

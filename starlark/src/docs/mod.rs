@@ -43,6 +43,7 @@ use crate::syntax::ast::AstPayload;
 use crate::syntax::ast::AstStmtP;
 use crate::syntax::ast::ExprP;
 use crate::syntax::ast::StmtP;
+#[cfg(not(target_family = "wasm"))]
 use crate::values::StarlarkValue;
 use crate::values::Trace;
 
@@ -849,6 +850,7 @@ pub fn render_docs_as_code(docs: &[Doc]) -> String {
 ///
 /// For dynamically linked binaries, documentation will only be able to retrieved after the crate's
 /// library is `dlopen()`ed.
+#[cfg(not(target_family = "wasm"))]
 pub fn get_registered_starlark_docs() -> Vec<Doc> {
     inventory::iter::<RegisteredDoc>
         .into_iter()
@@ -856,13 +858,16 @@ pub fn get_registered_starlark_docs() -> Vec<Doc> {
         .collect()
 }
 
+#[cfg(not(target_family = "wasm"))]
 #[doc(hidden)]
 pub struct RegisteredDoc {
     pub getter: fn() -> Option<Doc>,
 }
 
+#[cfg(not(target_family = "wasm"))]
 inventory::collect!(RegisteredDoc);
 
+#[cfg(not(target_family = "wasm"))]
 impl RegisteredDoc {
     /// This function is called from generated code.
     pub fn for_type<'v, T: StarlarkValue<'v>>(custom_attrs: &[(&str, &str)]) -> Option<Doc> {

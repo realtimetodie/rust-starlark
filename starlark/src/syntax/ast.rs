@@ -21,12 +21,15 @@ use std::fmt;
 use std::fmt::Debug;
 use std::fmt::Display;
 use std::fmt::Formatter;
+#[cfg(not(target_family = "wasm"))]
 use std::mem;
 
 use allocative::Allocative;
 use derivative::Derivative;
 use dupe::Dupe;
 use gazebo::variants::VariantName;
+
+#[cfg(not(target_family = "wasm"))]
 use static_assertions::assert_eq_size;
 
 use crate::codemap::CodeMap;
@@ -92,8 +95,12 @@ pub(crate) type AstStmt = AstStmtP<AstNoPayload>;
 // Our best understanding of the drop in size is that previously the largest field
 // was Literal (9 words) wrapping AstLiteral (7 words). That's one more word of padding
 // than expected, which is fixed in later nightly.
+#[cfg(not(target_family = "wasm"))]
 const _: () = assert!(mem::size_of::<AstStmt>() <= mem::size_of::<[usize; 12]>());
+#[cfg(not(target_family = "wasm"))]
 const _: () = assert!(mem::size_of::<AstExpr>() <= mem::size_of::<[usize; 9]>());
+
+#[cfg(not(target_family = "wasm"))]
 assert_eq_size!(AstAssign, [usize; 7]);
 
 /// A representation of a Starlark module abstract syntax tree.
